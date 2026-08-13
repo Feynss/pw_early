@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import bcrypt from "bcryptjs";
+import cors from "cors";
 import { signToken } from "./jwt";
 import { prisma } from "./db";
 import { requireAuth, AuthRequest } from "./authMiddleware";
@@ -8,6 +9,7 @@ import { requireAuth, AuthRequest } from "./authMiddleware";
 const app = express();
 const PORT = 4000;
 
+app.use(cors({ origin: "http://localhost:5173" }));
 app.use(express.json());
 
 app.get("/api/health", (req, res) => {
