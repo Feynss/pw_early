@@ -1,20 +1,35 @@
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./LoginPage";
 import RegisterPage from "./RegisterPage";
+import WallPage from "./WallPage";
+import ProtectedRoute from "./ProtectedRoute";
 import { useAuth } from "./AuthContext";
 
-export default function App() {
-  const { user, token, isLoading } = useAuth();
+function AppRoutes() {
+  const { isLoading } = useAuth();
 
   if (isLoading) {
     return <p>Загрузка...</p>;
   }
 
   return (
-    <div>
-      <p>Статус: {user ? `Залогинен как ${user.username}` : "Не залогинен"}</p>
-      <p>Токен есть: {token ? "да" : "нет"}</p>
-      <LoginPage />
-      <RegisterPage />
-    </div>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+
+      <Route element={<ProtectedRoute />}>
+        <Route path="/wall" element={<WallPage />} />
+      </Route>
+
+      <Route path="/" element={<Navigate to="/wall" replace />} />
+    </Routes>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }

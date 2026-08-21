@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useAuth } from "./AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -25,6 +27,7 @@ export default function LoginPage() {
     }
 
     login(data.user, data.token);
+    navigate("/wall");
   }
 
   return (
