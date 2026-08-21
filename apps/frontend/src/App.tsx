@@ -3,7 +3,11 @@ import RegisterPage from "./RegisterPage";
 import { useAuth } from "./AuthContext";
 
 export default function App() {
-  const { user, token } = useAuth();
+  const { user, token, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <p>Загрузка...</p>;
+  }
 
   return (
     <div>

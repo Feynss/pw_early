@@ -42,7 +42,7 @@ export default function RegisterPage() {
         <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
       </div>
       <div>
-        <label>Отображаемый Никнейм</label>
+        <label>Никнейм</label>
         <input type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)} required />
       </div>
       <div>
