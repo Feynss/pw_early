@@ -19,4 +19,13 @@ model User {
   passwordHash String
   displayName  String
   createdAt    DateTime @default(now())
+  posts Post[]
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }

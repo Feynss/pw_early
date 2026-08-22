@@ -61,6 +61,36 @@ app.get("/api/auth/me", requireAuth, async (req: AuthRequest, res) => {
   res.json({ id: user!.id, email: user!.email, username: user!.username });
 });
 
+app.post("/api/posts", requireAuth, async (req: AuthRequest, res) => {
+  const { content } = req.body;
+
+  const post = await prisma.post.create({
+    data: {
+      content,
+      authorId: req.userId!,
+    },
+  });
+
+  res.status(201).json(post);
+});
+
+app.get("/api/posts/wall/:username", async (req, res) => {
+  const wallOwner = await prisma.user.findUnique({
+    where: { username: req.params.username },
+  });
+
+  if (!wallOwner) {
+    return res.status(404).json({ message: "Пользователь не найден" });
+  }
+
+  const posts = await prisma.post.findMany({
+    where: { authorId: wallOwner.id },
+    orderBy: { createdAt: "desc" },
+  });
+
+  res.json(posts);
+});
+
 app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);
 });
