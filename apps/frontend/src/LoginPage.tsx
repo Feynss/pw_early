@@ -27,19 +27,19 @@ export default function LoginPage() {
     }
 
     login(data.user, data.token);
-    navigate("/wall");
+    navigate(`/wall/${data.user.username}`);
   }
 
   return (
     <form onSubmit={handleSubmit}>
-      <h1>Вход</h1>
+      <h1>Login</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <div>
         <label>Email</label>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
       </div>
       <div>
-        <label>Пароль</label>
+        <label>Password</label>
         <input
           type="password"
           value={password}
@@ -47,7 +47,7 @@ export default function LoginPage() {
           required
         />
       </div>
-      <button type="submit">Войти</button>
+      <button type="submit">Log In</button>
     </form>
   );
 }

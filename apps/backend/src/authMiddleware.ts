@@ -9,7 +9,7 @@ export function requireAuth(req: AuthRequest, res: Response, next: NextFunction)
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Требуется авторизация" });
+    return res.status(401).json({ message: "Authorization required" });
   }
 
   const token = authHeader.slice("Bearer ".length);
@@ -19,6 +19,6 @@ export function requireAuth(req: AuthRequest, res: Response, next: NextFunction)
     req.userId = payload.userId;
     next();
   } catch {
-    return res.status(401).json({ message: "Невалидный или истёкший токен" });
+    return res.status(401).json({ message: "Invalid or expired token" });
   }
 }

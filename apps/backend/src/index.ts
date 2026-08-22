@@ -39,13 +39,13 @@ app.post("/api/auth/login", async (req, res) => {
   const user = await prisma.user.findUnique({ where: { email } });
 
   if (!user) {
-    return res.status(401).json({ message: "Неверный email или пароль" });
+    return res.status(401).json({ message: "Invalid email or password" });
   }
 
   const passwordMatches = await bcrypt.compare(password, user.passwordHash);
 
   if (!passwordMatches) {
-    return res.status(401).json({ message: "Неверный email или пароль" });
+    return res.status(401).json({ message: "Invalid email or password" });
   }
 
   const token = signToken(user.id);
@@ -80,7 +80,7 @@ app.get("/api/posts/wall/:username", async (req, res) => {
   });
 
   if (!wallOwner) {
-    return res.status(404).json({ message: "Пользователь не найден" });
+    return res.status(404).json({ message: "User not found" });
   }
 
   const posts = await prisma.post.findMany({

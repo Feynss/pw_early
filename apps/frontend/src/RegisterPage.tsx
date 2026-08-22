@@ -29,27 +29,27 @@ export default function RegisterPage() {
     }
 
     login(data.user, data.token);
-    navigate("/wall");
+    navigate(`/wall/${data.user.username}`);
   }
 
   return (
     <form onSubmit={handleSubmit}>
-      <h1>Регистрация</h1>
+      <h1>Sign Up</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <div>
         <label>Email</label>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
       </div>
       <div>
-        <label>Логин</label>
+        <label>Username (for url)</label>
         <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
       </div>
       <div>
-        <label>Никнейм</label>
+        <label>Display name</label>
         <input type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)} required />
       </div>
       <div>
-        <label>Пароль</label>
+        <label>Password</label>
         <input
           type="password"
           value={password}
@@ -57,7 +57,7 @@ export default function RegisterPage() {
           required
         />
       </div>
-      <button type="submit">Зарегистрироваться</button>
+      <button type="submit">Sign Up</button>
     </form>
   );
 }
