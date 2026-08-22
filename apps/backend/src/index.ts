@@ -91,6 +91,55 @@ app.get("/api/posts/wall/:username", async (req, res) => {
   res.json(posts);
 });
 
+app.delete("/api/posts/:postId", requireAuth, async (req: AuthRequest, res) => {
+  const postId = req.params.postId as string;
+  const post = await prisma.post.findUnique({ where: { id: postId } });
+
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+
+  if (post.authorId !== req.userId) {
+    return res.status(403).json({ message: "You can only delete your own posts" });
+  }
+
+  await prisma.post.delete({ where: { id: post.id } });
+  res.status(204).send();
+});
+
+app.post("/api/posts/:postId/like", requireAuth, async (req: AuthRequest, res) => {
+  const postId = req.params.postId as string;
+
+  const post = await prisma.post.findUnique({ where: { id: postId } });
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+
+  const existingLike = await prisma.like.findUnique({
+    where: { userId_postId: { userId: req.userId!, postId } },
+  });
+
+  if (existingLike) {
+    return res.status(409).json({ message: "Post already liked" });
+  }
+
+  await prisma.like.create({
+    data: { userId: req.userId!, postId },
+  });
+
+  res.status(201).send();
+});
+
+app.delete("/api/posts/:postId/like", requireAuth, async (req: AuthRequest, res) => {
+  const postId = req.params.postId as string;
+
+  await prisma.like.deleteMany({
+    where: { userId: req.userId!, postId },
+  });
+
+  res.status(204).send();
+});
+
 app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);
 });
